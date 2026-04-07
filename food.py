@@ -1,7 +1,7 @@
-# import requests
-# from bs4 import BeautifulSoup
-# import re
-# import csv
+import requests
+from bs4 import BeautifulSoup
+import re
+import csv
 
 # Variable globale pour l'URL de base
 BASE_URL = "https://www.infocalories.fr/calories/calories-"
