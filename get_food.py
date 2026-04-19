@@ -1,32 +1,44 @@
-from food import Aliment
-import argparse
+"""
+Script de récupération des informations nutritionnelles via la ligne de commande.
+Ce script utilise la classe Aliment pour scraper des données et les sauvegarder.
+"""
+
 import sys
+import argparse
+from food import Aliment
 
-print("Running script...")
+# Constante globale en majuscule pour respecter la PEP 8
+FICHIER_HISTORIQUE = "historique_aliments.csv"
 
-parser = argparse.ArgumentParser("Food Informations")
-parser.add_argument('-f', '--food', help="your food name", default='tomate')
+def main():
+    """
+    Fonction principale : gère les arguments, lance le scraping et sauvegarde.
+    """
+    parser = argparse.ArgumentParser(description="Recherche d'informations nutritionnelles.")
+    parser.add_argument('-f', '--food', help="Nom de l'aliment à rechercher", default='tomate')
 
-# Récupération de l'argument tapé dans le terminal
-args = parser.parse_args()
-food_name = args.food
+    args = parser.parse_args()
+    nom_recherche = args.food
 
-# Instanciation de l'objet Food
-mon_aliment = Aliment()
+    mon_aliment = Aliment()
 
-try:
-    print(f"Recherche des informations pour : '{food_name}'...")
+    try:
+        print(f"Recherche des informations pour : '{nom_recherche}'...")
 
-    # Récupération et affichage des données (NOMS CORRIGÉS)
-    mon_aliment.recuperer_infos_aliment(food_name)
-    mon_aliment.afficher_infos_aliment()
+        # Récupération et affichage des données
+        mon_aliment.recuperer_infos_aliment(nom_recherche)
+        mon_aliment.afficher_infos_aliment()
 
-    # Sauvegarde dans le fichier CSV (NOM CORRIGÉ)
-    fichier_csv = "historique_aliments.csv"
-    mon_aliment.sauvegarder_dans_csv(fichier_csv)
-    print(f" Informations sauvegardées avec succès dans '{fichier_csv}'.")
+        # Sauvegarde dans le fichier CSV défini en constante
+        mon_aliment.sauvegarder_dans_csv(FICHIER_HISTORIQUE)
+        print(f"Informations sauvegardées dans '{FICHIER_HISTORIQUE}'.")
 
-except Exception as e:
-    # Gestion des erreurs si l'aliment n'est pas trouvé
-    print(f"\n {e}")
-    sys.exit(1)
+    except ValueError as err:
+        print(f"Erreur de données : {err}")
+        sys.exit(1)
+    except ConnectionError as err:
+        print(f"Erreur de connexion réseau : {err}")
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main()
